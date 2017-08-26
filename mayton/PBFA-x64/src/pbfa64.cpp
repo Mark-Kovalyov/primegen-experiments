@@ -8,7 +8,7 @@
 
 //#define FLOATING_SQRT
 
-//  Infinite Prime Generator 1.1 (c) sql.ru
+//  Infinite Prime Generator 1.2 (c) sql.ru
 // 
 //  2009.05.02   -    Mayton
 //
@@ -24,7 +24,7 @@
 //  2015.04.02   -    Mayton   - improovement speed of main loop. Added non linear step. 
 //                               (Thnx to DimaT).
 //  2015.04.04   -    Mayton   - added triplet count
-
+//  2017.08.26   -    Mayton   - remove garbage, improove comments.
 
 // TODO: Fix more bugs!
 
@@ -45,19 +45,11 @@ uint64_t isqrt64(uint64_t x)
 	if (x1 > 3)                   { s+=1; }
 	g0 = 1<<s;
 	g1 = (g0 + (x >> s)) >> 1;
-	while(g1 < g0)
-	{
+	while(g1 < g0) {
 		g0 = g1;
 		g1 = (g0 + (x/g0)) >> 1;
 	}
 	return g0;
-}
-
-// TODO: Added improoved method.
-
-uint64_t isqrt64approx(uint64_t x, uint64_t approximation)
-{	
-	return 0;
 }
 
 vector<uint64_t> primesCache;
@@ -75,9 +67,9 @@ int main(int argc, char* argv[], char* env[]) {
 	if (argc >= 2) {
 		max_prime = atoi(argv[1]);
 	} else {
-		printf("\nInfinite Prime Generator 1.1 (x64) (c) sql.ru\n");
+		printf("\nInfinite Prime Generator 1.2 (x64) (c) sql.ru, Aug 2017\n");
 		printf("Usage:\n\n");
-		printf(" infiniteprimes <maxPrime> [ \">\" <outputfile> ]\n");
+		printf(" pbfa64 <maxPrime> [ \">\" <outputfile> ]\n");
 		return 0;
 	}
 
@@ -114,12 +106,12 @@ int main(int argc, char* argv[], char* env[]) {
 		bool isprime = true;
 
 #ifdef FLOATING_SQRT
-		uint64_t ub = 1 + (uint64_t ) sqrt((double) c1); // ? Каков диапазон приведения типа uint64_t -> double?
+		uint64_t ub = 1 + (uint64_t ) sqrt((double) c1); // What is the interval of casting uint64_t -> double?
 #else
 		uint64_t ub = 1 + isqrt64(c1); 
 #endif
 		
-		uint64_t i = 1; // Начинаем с числа 3 т.к. четные отсутствуют
+		uint64_t i = 1; // Starting from 3 because of even are absent
 
                 int size = primesCache.size();
 
