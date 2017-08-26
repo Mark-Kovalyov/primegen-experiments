@@ -3,8 +3,11 @@
 #include <stdint.h>
 #include <time.h>
 #include <math.h>
+#include <string>
 
 #include <vector>
+
+#define MAX_SIGNED_LONG64 "9223372036854775807"
 
 //#define FLOATING_SQRT
 
@@ -30,8 +33,7 @@
 
 using namespace std;
 
-uint64_t isqrt64(uint64_t x)
-{	
+uint64_t isqrt64(uint64_t x) {	
 	uint64_t x1;
 	uint64_t s, g0, g1;
 	if (x <= 1) return x;
@@ -54,6 +56,7 @@ uint64_t isqrt64(uint64_t x)
 
 vector<uint64_t> primesCache;
 
+// TODO: Should be captured signal Ctlr+C to save state machine for contonuation ability.
 int main(int argc, char* argv[], char* env[]) {
 
 	int time1 = time(NULL);
@@ -65,11 +68,21 @@ int main(int argc, char* argv[], char* env[]) {
 	uint64_t max_prime = 2;
 
 	if (argc >= 2) {
-		max_prime = atoi(argv[1]);
+                std::string arg1(argv[1]);
+                if (arg1.length() > 19 || arg1 > MAX_SIGNED_LONG64 ) {
+                     fprintf(stderr, "The argument '%s' is greather than maximum 64bit integer value. Please try less!", arg1.c_str());
+                     return 0;
+                }
+		max_prime = atol(argv[1]);
+		//max_prime = static_cast<uint64_t>(arg1);
 	} else {
 		printf("\nInfinite Prime Generator 1.2 (x64) (c) sql.ru, Aug 2017\n");
 		printf("Usage:\n\n");
-		printf(" pbfa64 <maxPrime> [ \">\" <outputfile> ]\n");
+		printf(" pbfa64 <maxPrime> [options] [ > outputFile.lst ]\n");
+		//printf("Where options:\n");
+		//printf(" -d   : dense print (width=80 symbols)\n");
+		//printf(" -s c : split with symbol c\n");
+		//printf(" -p : persist primes cache into datafiles c\n");
 		return 0;
 	}
 
@@ -95,7 +108,7 @@ int main(int argc, char* argv[], char* env[]) {
 
 	uint64_t step = 4;
 
-	for (uint64_t c1 = min_prime; c1 < max_prime; c1 += step) {
+	for (uint64_t c1 = min_prime; c1 <= max_prime; c1 += step) {
 		step^=0x0006;
 		if (++echo_count > 1000000) {
 			fprintf(stderr, "Completed: %d %%\n",
@@ -104,7 +117,7 @@ int main(int argc, char* argv[], char* env[]) {
 		}
 
 		bool isprime = true;
-
+		// TODO: What is the reason to calculate SQRT every step? Should be replaced by linear approximation.
 #ifdef FLOATING_SQRT
 		uint64_t ub = 1 + (uint64_t ) sqrt((double) c1); // What is the interval of casting uint64_t -> double?
 #else
@@ -137,7 +150,7 @@ int main(int argc, char* argv[], char* env[]) {
 	}
 
 	int timeElapsed = time(NULL) - time1;
-
+	fprintf(stderr, "\n");
 	fprintf(stderr, "Primes detected      : %d\n",           primes);
 	fprintf(stderr, "Twin primes          : %d\n",           twin_primes);
         fprintf(stderr, "Triplet primes       : %d\n",           triplet_primes);
