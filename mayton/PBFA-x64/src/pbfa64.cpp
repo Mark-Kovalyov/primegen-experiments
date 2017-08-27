@@ -4,7 +4,8 @@
 #include <time.h>
 #include <math.h>
 #include <string>
-
+#include <iostream>
+#include <algorithm>
 #include <vector>
 
 #define MAX_SIGNED_LONG64 "9223372036854775807"
@@ -28,10 +29,37 @@
 //                               (Thnx to DimaT).
 //  2015.04.04   -    Mayton   - added triplet count
 //  2017.08.26   -    Mayton   - remove garbage, improove comments.
+//  2017.08.27   -    Mayton   - added output formatting (hex, decimal, octal)
 
 // TODO: Fix more bugs!
 
 using namespace std;
+
+string toBin(uint64_t x) {
+        string res = "";
+        int i = 0;
+        while(i<32) {
+	    // TODO: Is it possible to mask & shift with uint64_t in MinGW ?
+            if (x && 0x8000000000000000L ) break; 
+            x >>= 1;
+            i++;
+        }
+        while(i<32) {
+            if (x && 0x8000000000000000L ) res+="1"; else res+="0"; 
+            x >>= 1;
+            i++;
+        }
+        return res;
+}
+
+string filterAscii(const string& s){
+	// TODO: Complete
+	return s;
+}
+
+bool allDigits(const string& s) {
+    return all_of(s.begin(), s.end(), ::isdigit);
+}
 
 uint64_t isqrt64(uint64_t x) {	
 	uint64_t x1;
@@ -59,6 +87,7 @@ vector<uint64_t> primesCache;
 // TODO: Should be captured signal Ctlr+C to save state machine for contonuation ability.
 int main(int argc, char* argv[], char* env[]) {
 
+
 	int time1 = time(NULL);
 
         int twin_primes = 0;
@@ -67,30 +96,57 @@ int main(int argc, char* argv[], char* env[]) {
 
 	uint64_t max_prime = 2;
 
+	string format = "%llu";
+        string splitter = "\n";
+
 	if (argc >= 2) {
-                std::string arg1(argv[1]);
-                if (arg1.length() > 19 || arg1 > MAX_SIGNED_LONG64 ) {
-                     fprintf(stderr, "The argument '%s' is greather than maximum 64bit integer value. Please try less!", arg1.c_str());
+                string arg1(argv[1]);
+                string max_signed_long64 = string(MAX_SIGNED_LONG64);
+                if (arg1.length() > max_signed_long64.length() || !allDigits(arg1) || arg1 > max_signed_long64 ) {
+                     fprintf(stderr, "The argument '%s' doesn't represent a number or is greather than maximum 64bit integer value. Please try less!", arg1.c_str());
                      return 0;
                 }
-		max_prime = atol(argv[1]);
-		//max_prime = static_cast<uint64_t>(arg1);
+                max_prime = atol(argv[1]);
+                int argn = 2;
+                while(argn < argc) {
+                     string carg = argv[argn];
+                     if (carg.substr(0,2) == "-o") {
+                         if (carg == "-oh" ) { format = "%llX"; }
+                         else if (carg == "-od" ) { format = "%llu"; }
+                         else { 
+                             fprintf(stderr, "Unknown argument '%s'. Please correct and try again", carg.c_str());
+                             return 0;
+                         }
+                     } else if (carg.substr(0,2) == "-s") {
+                         if (carg == "-sTAB") { splitter="\t"; }
+                         else if (carg == "-sEOL") { splitter="\n"; }
+                         else if (carg == "-sSP") { splitter=" "; }
+                         else { splitter = filterAscii(carg.substr(2)); };
+                     }
+                     argn++;
+                }
+                //max_prime = static_cast<uint64_t>(arg1);
 	} else {
 		printf("\nInfinite Prime Generator 1.2 (x64) (c) sql.ru, Aug 2017\n");
 		printf("Usage:\n\n");
-		printf(" pbfa64 <maxPrime> [options] [ > outputFile.lst ]\n");
-		//printf("Where options:\n");
-		//printf(" -d   : dense print (width=80 symbols)\n");
-		//printf(" -s c : split with symbol c\n");
+		printf(" pbfa64 <maxPrime> [options] [ > outputFile.lst ]\n\n");
+		printf("Where options are:\n");
+		printf(" -o{b|d|h}             : format outpus as binary, or hex. Decimal is default.\n");
+		printf(" -s{;|,|..|EOL|TAB|SP} : splitter. Default is unix EOL ('\\n'). Aliases for\n");
+                printf("                         space, tab e.t.c are accordingly.\n");
+                printf(" -ns                   : suppress statistics report below\n");
 		//printf(" -p : persist primes cache into datafiles c\n");
+                printf("\n");
 		return 0;
 	}
 
 	primesCache.push_back(2);
 	primesCache.push_back(3);
 
-	printf("2\n");
-	printf("3\n");
+	string formatString = (format + splitter);
+
+	printf(formatString.c_str(),2);
+	printf(formatString.c_str(),3);
 
 	uint64_t min_prime = 5;
 
@@ -107,6 +163,7 @@ int main(int argc, char* argv[], char* env[]) {
 	uint64_t interval = max_prime - min_prime;
 
 	uint64_t step = 4;
+        
 
 	for (uint64_t c1 = min_prime; c1 <= max_prime; c1 += step) {
 		step^=0x0006;
@@ -138,7 +195,8 @@ int main(int argc, char* argv[], char* env[]) {
 			i++;
 		}
 		if (isprime) {
-			printf("%llu\n",c1);
+			//printf("%llu\n",c1);
+			printf(formatString.c_str(),c1);
 			if (c1 - c2 == 2) twin_primes++;
 			uint64_t d = c2 - c3;
 			if ( ( d == 2 || d == 4 ) && ( c1 - c3 == 6 ) ) triplet_primes++;
