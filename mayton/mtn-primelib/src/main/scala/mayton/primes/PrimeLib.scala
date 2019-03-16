@@ -37,6 +37,15 @@ object PrimeLib {
     tx
   }
 
+  def prod(a: BigInt, b: BigInt): BigInt = {
+    if (a == b) return a
+    var tx = BigInt(1)
+    for (i <- a to b) {
+      tx = tx * i
+    }
+    tx
+  }
+
   /**
     * Сочетания. Так-же известны как биноминальный коэффициент
     *
@@ -64,11 +73,12 @@ object PrimeLib {
     */
   def permutations(k: BigInt, n: BigInt): BigInt = {
     if (k > n || n < 1 || k < 1) throw new IllegalArgumentException
-    
-    // TODO: Optimize
-    fact(n) / fact(n - k)
-  }
 
+    val ch = fact(n)
+    val zn = fact(n - k)
+
+    return ch / zn
+  }
 
   /**
     * Наибольший общий делитель

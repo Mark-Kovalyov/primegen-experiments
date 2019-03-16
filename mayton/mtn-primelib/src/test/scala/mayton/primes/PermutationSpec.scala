@@ -22,6 +22,14 @@ class PermutationSpec extends FlatSpec with Matchers {
     permutations(BigInt(2),BigInt(3)) should be (BigInt(6))
   }
 
+  "permutations(2,15)" should "be equals to 210" in {
+    permutations(BigInt(2),BigInt(15)) should be (BigInt(210))
+  }
+
+  def test1: Unit = {
+
+  }
+
 
 
 
