@@ -30,7 +30,7 @@
 //  2015.04.04   -    Mayton   - added triplet count
 //  2017.08.26   -    Mayton   - remove garbage, improove comments.
 //  2017.08.27   -    Mayton   - added output formatting (hex, decimal, octal)
-
+//  2019.03.16   -    Mayton   - fixed 'ns' usage. Removed sqrt() function for double. Remove unised functions.
 // TODO: Fix more bugs!
 
 using namespace std;
@@ -39,7 +39,6 @@ string toBin(uint64_t x) {
         string res = "";
         int i = 0;
         while(i<32) {
-	    // TODO: Is it possible to mask & shift with uint64_t in MinGW ?
             if (x && 0x8000000000000000L ) break; 
             x >>= 1;
             i++;
@@ -50,11 +49,6 @@ string toBin(uint64_t x) {
             i++;
         }
         return res;
-}
-
-string filterAscii(const string& s){
-	// TODO: Complete
-	return s;
 }
 
 bool allDigits(const string& s) {
@@ -98,6 +92,7 @@ int main(int argc, char* argv[], char* env[]) {
 
 	string format = "%llu";
         string splitter = "\n";
+        bool noStat = false;
 
 	if (argc >= 2) {
                 string arg1(argv[1]);
@@ -118,24 +113,31 @@ int main(int argc, char* argv[], char* env[]) {
                              return 0;
                          }
                      } else if (carg.substr(0,2) == "-s") {
-                         if (carg == "-sTAB") { splitter="\t"; }
-                         else if (carg == "-sEOL") { splitter="\n"; }
-                         else if (carg == "-sSP") { splitter=" "; }
-                         else { splitter = filterAscii(carg.substr(2)); };
+                         if (carg == "-sTAB") { 
+                            splitter="\t"; 
+                         } else if (carg == "-sEOL") { 
+                            splitter="\n"; 
+                         } else if (carg == "-sCOMMA") {
+                            splitter=",";
+                         } else if (carg == "-sSP") { 
+                            splitter=" "; 
+                         } else { 
+                            // TODO: Complete for comma, e.t.c symbols 
+                         }
+                     } else if (carg == "-ns") {
+                         noStat = true;
                      }
                      argn++;
                 }
-                //max_prime = static_cast<uint64_t>(arg1);
 	} else {
 		printf("\nInfinite Prime Generator 1.2 (x64) (c) sql.ru, Aug 2017\n");
 		printf("Usage:\n\n");
 		printf(" pbfa64 <maxPrime> [options] [ > outputFile.lst ]\n\n");
 		printf("Where options are:\n");
 		printf(" -o{b|d|h}             : format outpus as binary, or hex. Decimal is default.\n");
-		printf(" -s{;|,|..|EOL|TAB|SP} : splitter. Default is unix EOL ('\\n'). Aliases for\n");
+		printf(" -s{COMMA|EOL|TAB|SP} : splitter. Default is unix EOL ('\\n'). Aliases for\n");
                 printf("                         space, tab e.t.c are accordingly.\n");
                 printf(" -ns                   : suppress statistics report below\n");
-		//printf(" -p : persist primes cache into datafiles c\n");
                 printf("\n");
 		return 0;
 	}
@@ -175,18 +177,14 @@ int main(int argc, char* argv[], char* env[]) {
 
 		bool isprime = true;
 		// TODO: What is the reason to calculate SQRT every step? Should be replaced by linear approximation.
-#ifdef FLOATING_SQRT
-		uint64_t ub = 1 + (uint64_t ) sqrt((double) c1); // What is the interval of casting uint64_t -> double?
-#else
 		uint64_t ub = 1 + isqrt64(c1); 
-#endif
 		
 		uint64_t i = 1; // Starting from 3 because of even are absent
 
                 int size = primesCache.size();
 
 		while (i < size) {
-			if ((c1 % primesCache[i]) == 0) {
+			if (c1 % primesCache[i] == 0) {
 				isprime = false;
 				break;
 			}
@@ -195,7 +193,6 @@ int main(int argc, char* argv[], char* env[]) {
 			i++;
 		}
 		if (isprime) {
-			//printf("%llu\n",c1);
 			printf(formatString.c_str(),c1);
 			if (c1 - c2 == 2) twin_primes++;
 			uint64_t d = c2 - c3;
@@ -208,19 +205,17 @@ int main(int argc, char* argv[], char* env[]) {
 	}
 
 	int timeElapsed = time(NULL) - time1;
-	fprintf(stderr, "\n");
-	fprintf(stderr, "Primes detected      : %d\n",           primes);
-	fprintf(stderr, "Twin primes          : %d\n",           twin_primes);
-        fprintf(stderr, "Triplet primes       : %d\n",           triplet_primes);
-	fprintf(stderr, "Range                : [2..%llu]\n",      max_prime);
-	fprintf(stderr, "Memory cache used    : %d K\n",         (sizeof(uint64_t ) * primesCache.capacity()) / 1024);
-#ifdef FLOATING_SQRT
-	fprintf(stderr, "Square root algorithm: math::sqrt(double)\n");
-#else
-	fprintf(stderr, "Square root algorithm: Henry Warren's 'isqrt64'\n");
-#endif
-	fprintf(stderr, "AVG speed generation : %d units/sec\n", (timeElapsed == 0) ? 0 : primes / timeElapsed);
-	fprintf(stderr, "Elapsed time         : %d sec\n",       timeElapsed);
+
+	if (!noStat) {
+	    fprintf(stderr, "\n");
+	    fprintf(stderr, "Primes detected      : %lu\n",           primes);
+	    fprintf(stderr, "Twin primes          : %u\n",            twin_primes);
+	    fprintf(stderr, "Triplet primes       : %i\n",            triplet_primes);
+	    fprintf(stderr, "Range                : [2..%lu]\n",      max_prime);
+	    fprintf(stderr, "Memory cache used    : %li K\n",         (sizeof(uint64_t ) * primesCache.capacity()) / 1024);
+	    fprintf(stderr, "AVG speed generation : %lu units/sec\n", (timeElapsed == 0) ? 0 : primes / timeElapsed);
+	    fprintf(stderr, "Elapsed time         : %i sec\n",       timeElapsed);
+	}
 
 	primesCache.clear();
 
