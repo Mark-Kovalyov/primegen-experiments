@@ -2,6 +2,8 @@ package mayton.primes
 
 import java.lang.Math.log
 
+import scala.annotation.tailrec
+
 object PrimeLib {
 
   val π = Math.PI
@@ -18,9 +20,36 @@ object PrimeLib {
     def bi = BigInt(digits,2)
   }
 
-  // TODO: Improove acuaracy
-  def densityPrimes(x: Int) : Int = (x / log(x)).asInstanceOf[Int]
+  def estimatePrimes(x: Double) : Double = x / log(x)
 
+  /**
+    * Euler's function
+    *
+    * @param x
+    * @return
+    */
+  def φ(x: BigInt): BigInt = {
+    ???
+  }
+
+  def isPrimeFermat(x: BigInt): Boolean = {
+    ???
+  }
+
+
+
+  /**
+    * Prime candidates generator
+    *
+    * @return
+    */
+  def primeCandidates() : Stream[Int] = {
+    def primeCandidates(n : Int, step : Int) : Stream[Int] = {
+      n #:: primeCandidates(n + step, step^0x6)
+    }
+
+    2 #:: 3 #:: primeCandidates(5, 2)
+  }
 
   /**
     * Factorial
@@ -29,12 +58,16 @@ object PrimeLib {
     * @return
     */
   def fact(x: BigInt): BigInt = {
-    if (x < BigInt(0)) throw new IllegalArgumentException
-    var tx = BigInt(1)
-    for (i <- BigInt(2) to x) {
-      tx = tx * i
-    }
-    tx
+    if (x < 0)
+      throw new IllegalArgumentException
+
+    @tailrec def facttail(x: BigInt, accum: BigInt): BigInt =
+      if (x == 0)
+        accum
+      else
+        facttail(x - 1, accum * x)
+
+    facttail(x, 1)
   }
 
   def prod(a: BigInt, b: BigInt): BigInt = {
