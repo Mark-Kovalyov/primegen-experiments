@@ -28,15 +28,18 @@ object PrimeLib {
     * @param x
     * @return
     */
-  def φ(x: BigInt): BigInt = {
-    ???
+  def φ(n: Long): Long = {
+    var result = 1
+    for(i <- 2L to n)
+      if (gcd(i,n) == 1)
+        result = result + 1
+
+    result
   }
 
-  def isPrimeFermat(x: BigInt): Boolean = {
+  def testFerma(a: BigInt, n:BigInt): Boolean = {
     ???
   }
-
-
 
   /**
     * Prime candidates generator
@@ -122,6 +125,12 @@ object PrimeLib {
     */
   def gcd(a: BigInt, b: BigInt): BigInt = if (b != BigInt(0)) gcd(b, a % b) else a
 
+  def gcd(a: Long, b: Long): Long = if (b != 0) gcd(b, a % b) else a
+
+  def gcd(a: Int, b: Int): Int = if (b != 0) gcd(b, a % b) else a
+
+  //def gcd(a: AnyVal, b: AnyVal): AnyVal = if (b != 0) gcd(b, a % b) else a
+
   /**
     * Наименьшее общее кратное
     *
@@ -138,7 +147,11 @@ object PrimeLib {
     * @param b
     * @return
     */
-  def mutuallySimple(a: BigInt, b: BigInt): Boolean = gcd(a,b) == BigInt(1)
+  def mutuallyPrime(a: BigInt, b: BigInt): Boolean = gcd(a,b) == BigInt(1)
+
+  def mutuallyPrime(a: Long, b: Long): Boolean = gcd(a,b) == 1
+
+  def mutuallyPrime(a: Int, b: Int): Boolean = gcd(a,b) == 1
 
 
   def mutuallySimple(list : List[BigInt]) : Boolean = {

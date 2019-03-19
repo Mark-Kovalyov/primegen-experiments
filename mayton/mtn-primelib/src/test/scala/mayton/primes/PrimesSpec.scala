@@ -5,8 +5,7 @@ import org.scalatest.{FlatSpec, Matchers}
 class PrimesSpec extends FlatSpec with Matchers {
 
   "Assume that primary steam" should "be correct" in {
-    // TODO: Fix
-    PrimeLib.primeCandidates.take(50).foreach( x => println(s"$x") )
+    PrimeLib.primeCandidates.take(6) should be equals List(2,3,5,7,11,13,17)
   }
 
 }
