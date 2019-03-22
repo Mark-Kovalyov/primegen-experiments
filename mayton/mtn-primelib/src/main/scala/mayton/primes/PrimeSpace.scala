@@ -23,12 +23,8 @@ object PrimeSpace {
 
     for(i <- 0 to SIZE / PIXEL) {
       for(j <- 0 to SIZE / PIXEL) {
-
         g2d.setColor(if (PrimeLib.mutuallyPrime(i,j)) Color.RED else Color.CYAN)
-
         g2d.fillRect(i * PIXEL, j * PIXEL, PIXEL, PIXEL)
-
-
       }
     }
 

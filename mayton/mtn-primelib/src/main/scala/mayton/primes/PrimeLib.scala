@@ -25,12 +25,21 @@ object PrimeLib {
   /**
     * Euler's function
     *
-    * @param x
+    * @param n
     * @return
     */
   def φ(n: Long): Long = {
     var result = 1
     for(i <- 2L to n)
+      if (gcd(i,n) == 1)
+        result = result + 1
+
+    result
+  }
+
+  def φ(n: Int): Int = {
+    var result = 1
+    for(i <- 2 to n)
       if (gcd(i,n) == 1)
         result = result + 1
 
