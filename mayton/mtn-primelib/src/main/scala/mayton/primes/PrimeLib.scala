@@ -1,6 +1,7 @@
 package mayton.primes
 
 import java.lang.Math.log
+import java.lang.Math.abs
 import java.math.BigInteger
 
 import scala.annotation.tailrec
@@ -64,6 +65,7 @@ object PrimeLib {
   }
 
   def fermaTest(a: BigInt, n:BigInt): Boolean = {
+    // TODO:
     ???
   }
 
@@ -95,7 +97,9 @@ object PrimeLib {
       }) p >>= 2
       if ((p & 1) == 0) {
         p >>= 1
-        if (((u ^ (u >> 1)) & 2) != 0) j = -j // 3 (011) or 5 (101) mod 8
+        if (((u ^ (u >> 1)) & 2) != 0) {
+          j = -j // 3 (011) or 5 (101) mod 8
+        }
       }
       if (p == 1) return j
       // Then, apply quadratic reciprocity
@@ -106,15 +110,15 @@ object PrimeLib {
       u = n.mod(BigInteger.valueOf(p)).intValue
 
       // Now compute Jacobi(u,p), u < p
-      while ( {
-        u != 0
-      }) {
-        while ( {
-          (u & 3) == 0
-        }) u >>= 2
+      while ( u != 0 ) {
+        while ((u & 3) == 0) {
+          u >>= 2
+        }
         if ((u & 1) == 0) {
           u >>= 1
-          if (((p ^ (p >> 1)) & 2) != 0) j = -j
+          if (((p ^ (p >> 1)) & 2) != 0) {
+            j = -j
+          }
         }
         if (u == 1) return j
         // Now both u and p are odd, so use quadratic reciprocity
@@ -128,7 +132,7 @@ object PrimeLib {
         // Now u >= p, so it can be reduced
         u %= p
       }
-      return 0
+      0
     }
 
     def lucasLehmerSequence(z: Int, k: BigInt, n: BigInt) : BigInt = {
@@ -147,24 +151,33 @@ object PrimeLib {
 
       val d = z
       var u = BigInt(1)
-      var u2 = 0
-      var v = 1
+      var u2 = BigInt(0)
+      var v = BigInt(1)
       var v2 = BigInt(0)
 
       var i = k.bitLength - 2
       while (i >= 0) {
-        u2 = u.*(v).%(n)
-        v2 = sq(v).+(d.*(sq(u))).mod(n)
-        if (v2.testBit(0)) v2 = v2 - n
+        //u2 = u.*(v).%(n)
+        u2 = ( u * v ) % n
+        //v2 = sq(v).+(d.*(sq(u))).mod(n)
+        v2 = sq(v) + (( d * sq(u)) % n)
+        if (v2.testBit(0)) {
+          v2 = v2 - n
+        }
         v2 = shiftRight(v2, 1)
         u = u2
         v = v2
         if (k.testBit(i)) {
           u2 = u.+(v).%(n)
-          if (testBit(u2,0)) u2 = u2 - n
+          if (testBit(u2,0)) {
+            u2 = u2 - n
+          }
           u2 = shiftRight(u2,1)
-          v2 = v.+(d.*(u)).%(n)
-          if (v2.testBit(0)) v2 = v2 - n
+          //v2 = v.+(d.*(u)).%(n)
+          v2 = v + ( d * u ) % n
+          if (v2.testBit(0)) {
+            v2 = v2 - n
+          }
           v2 = shiftRight(v2,1)
           u = u2
           v = v2
@@ -172,14 +185,14 @@ object PrimeLib {
         i -= 1;
         i = i + 1
       }
-      return u
+      u
     }
 
     var d = 5
 
     while (jacobiSymbol(d, n) != -1) {
       // 5, -7, 9, -11, ...
-      d = if (d < 0) Math.abs(d) + 2 else -(d + 2)
+      d = if (d < 0) abs(d) + 2 else -(d + 2)
     }
 
     // Step 2
