@@ -17,7 +17,8 @@ long double primesIntervalLongDouble(long double a, long double b) {
 int main(int argc, char* argv[], char* env[]) {
 
 	if (argc < 3) {
-	    printf("Primes-interval 1.0\n\n");
+            long double dummy = 1.0;
+	    printf("Primes-interval 1.0 (with %li bit of floating accuaracy)\n\n", 8 * sizeof(dummy));
 	    printf(" Usage: primes-interval [a] [b]\n\n");
 	    exit(0);
 	} else {	
