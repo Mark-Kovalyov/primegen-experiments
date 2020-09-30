@@ -2,6 +2,7 @@ package mayton.primes
 
 import java.lang.Math.log
 import java.lang.Math.abs
+import java.lang.Math.pow
 import java.math.BigInteger
 
 import scala.annotation.tailrec

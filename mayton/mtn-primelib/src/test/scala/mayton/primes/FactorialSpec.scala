@@ -1,27 +1,28 @@
 package mayton.primes
 
-import org.scalatest.{FlatSpec, Matchers}
 import mayton.primes.PrimeLib._
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.must.Matchers
 
-class FactorialSpec extends FlatSpec with Matchers {
+class FactorialSpec extends AnyFlatSpec with Matchers {
 
-  "Assume that factorial of 0" should "equals 1" in {
+  "Assume that factorial of 0" must "equals 1" in {
     val x = fact(BigInt(0))
-    x should be (BigInt(1))
+    x must be (BigInt(1))
   }
 
-  "Assume that factorial of 1" should "equals 1" in {
+  "Assume that factorial of 1" must "equals 1" in {
     val x = fact(BigInt(1))
-    x should be (BigInt(1))
+    x must be (BigInt(1))
   }
 
-  "Assume that factorial of 5" should "equals 120" in {
+  "Assume that factorial of 5" must "equals 120" in {
     val x = PrimeLib.fact(BigInt(5))
-    x should be (BigInt(120))
+    x must be (BigInt(120))
   }
 
-  it should "throw IllegalArgumentException if argument is negative" in {
-    a [IllegalArgumentException] should be thrownBy {
+  it must "throw IllegalArgumentException if argument is negative" in {
+    a [IllegalArgumentException] must be thrownBy {
       fact(BigInt(-1))
     }
   }

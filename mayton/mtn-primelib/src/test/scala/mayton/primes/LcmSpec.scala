@@ -1,12 +1,14 @@
 package mayton.primes
 
 import mayton.primes.PrimeLib._
-import org.scalatest.{FlatSpec, Matchers}
+import org.scalatest.flatspec.AnyFlatSpec
+import org.scalatest.matchers.must.Matchers
 
-class LcmSpec extends FlatSpec with Matchers {
 
-  "LCM(3,5)" should "be equals to 15" in {
-    lcm("3".b,"5".b) should be ("15".b)
+class LcmSpec extends AnyFlatSpec with Matchers {
+
+  "LCM(3,5)" must "be equals to 15" in {
+    lcm("3".b,"5".b) must be ("15".b)
   }
 
 }
