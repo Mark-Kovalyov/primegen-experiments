@@ -7,9 +7,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import static mayton.tinyasm.asm.Registers32bit.ebx;
-import static mayton.tinyasm.asm.Registers32bit.ecx;
-import static mayton.tinyasm.asm.Registers32bit.edx;
+import static mayton.tinyasm.asm.registers.Registers32bit.ebx;
+import static mayton.tinyasm.asm.registers.Registers32bit.ecx;
+import static mayton.tinyasm.asm.registers.Registers32bit.edx;
 
 public class Main {
 

@@ -1,5 +1,9 @@
 package mayton.tinyasm.asm;
 
+import mayton.tinyasm.asm.registers.Registers16bit;
+import mayton.tinyasm.asm.registers.Registers32bit;
+import mayton.tinyasm.asm.registers.RegistersXMM;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -30,6 +34,9 @@ public class X86Builder {
 
     public X86Builder addps(RegistersXMM r0, RegistersXMM r1) {
 
+        return this;
+    }
+    public X86Builder push(Registers16bit registers16bit) {
         return this;
     }
 

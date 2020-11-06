@@ -1,5 +1,8 @@
-package mayton.tinyasm.elf;
+package mayton.tinyasm.linux.elf;
 
+import mayton.tinyasm.linux.elf.document.ELFDocument;
+
+import javax.annotation.Nonnull;
 import java.io.OutputStream;
 
 public class ELFWriter implements AutoCloseable {
@@ -10,11 +13,8 @@ public class ELFWriter implements AutoCloseable {
         this.outputStream = outputStream;
     }
 
-    public void writeProgramHeaderTable(Object object) {
+    public void write(@Nonnull ELFDocument elfDocument) {
 
-    }
-
-    public void writeSectonHeaderTable(Object object) {
 
     }
 

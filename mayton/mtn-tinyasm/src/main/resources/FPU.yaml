@@ -1,5 +1,0 @@
-FPU:
-  "Data Transfer Instructions (Floating Point)" :
-    - fld
-    - fmul
-    - fcos
