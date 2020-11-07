@@ -24,7 +24,7 @@ public class ELFHeader {
     @Override
     public String toString() {
         return "ELFHeader{" +
-                "magic=" + String.format("04X", magic) +
+                "magic=" + String.format("%08X", magic) +
                 ", clazz=" + clazz +
                 ", endian=" + endian +
                 ", version=" + version +

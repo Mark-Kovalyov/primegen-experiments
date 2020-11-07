@@ -4,10 +4,7 @@
 *.zip
 *.gz
 *.iml
-mayton/mtn-primelib/out/
-mayton/mtn-primelib/.idea/
-mayton/mtn-primelib/project/
-mayton/mtn-primelib/target/
+**/.idea
 
 # Object files
 *.o
@@ -38,3 +35,6 @@ mayton/mtn-primelib/target/
 *.i*86
 *.x86_64
 *.hex
+
+
+
