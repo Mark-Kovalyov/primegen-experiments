@@ -20,6 +20,7 @@ public class ELFParser {
         this.inputStream = inputStream;
     }
 
+    //
     public ELFDocument parse() throws IOException {
         ELFDocument elfDocument = new ELFDocument();
         ELFHeader elfHeader = new ELFHeader();

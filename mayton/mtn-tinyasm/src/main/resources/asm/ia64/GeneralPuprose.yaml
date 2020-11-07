@@ -1,0 +1,27 @@
+GeneralPurpose:
+ - int : { javaName = "interrupt" }
+ - mov
+ - movl
+ - movq
+ - push
+ - pushq
+ - pop
+ - lea
+ - inc
+ - dec
+ - endbr64
+ - subq
+ - cmpl
+ - cltd
+ - idivl
+ - call
+ - leave
+ - ret
+ - subq
+ - imull
+ - call
+ - addq
+ - popq
+ - ret
+ - cmpxchg
+
