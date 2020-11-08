@@ -1,5 +1,5 @@
 GeneralPurpose:
- - int : { javaName = "interrupt" }
+ - int : { javaName : "interrupt" }
  - mov
  - movl
  - movq
@@ -14,14 +14,9 @@ GeneralPurpose:
  - cmpl
  - cltd
  - idivl
- - call
  - leave
  - ret
- - subq
  - imull
- - call
  - addq
  - popq
- - ret
  - cmpxchg
-

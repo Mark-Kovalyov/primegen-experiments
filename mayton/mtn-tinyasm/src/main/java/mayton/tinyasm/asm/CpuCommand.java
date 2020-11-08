@@ -4,12 +4,12 @@ import javax.annotation.concurrent.Immutable;
 import java.util.Arrays;
 
 @Immutable
-public class FPUCommand {
+public class CpuCommand {
 
     public final String mnemonic;
     public final String[] operands;
 
-    public FPUCommand(String mnemonic, String... operands) {
+    public CpuCommand(String mnemonic, String... operands) {
         this.mnemonic = mnemonic;
         this.operands = operands;
     }

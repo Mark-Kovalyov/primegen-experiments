@@ -5,21 +5,21 @@ import java.util.List;
 
 public class FPUBuilderSample {
 
-    List<FPUCommand> fpuCommands;
+    List<CpuCommand> cpuCommands;
 
     public class FPUBuilderSampleBuilder {
 
         public FPUBuilderSampleBuilder() {
-            fpuCommands = new ArrayList<>();
+            cpuCommands = new ArrayList<>();
         }
 
-        public FPUBuilderSampleBuilder addGenericFpuCommand(FPUCommand fpuCommand) {
-            fpuCommands.add(fpuCommand);
+        public FPUBuilderSampleBuilder addGenericFpuCommand(CpuCommand cpuCommand) {
+            cpuCommands.add(cpuCommand);
             return this;
         }
 
         public FPUBuilderSampleBuilder fld() {
-            fpuCommands.add(new FPUCommand("fld", ""));
+            cpuCommands.add(new CpuCommand("fld", ""));
             return this;
         }
 
